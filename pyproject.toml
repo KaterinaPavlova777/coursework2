@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "coursework2"
+version = "0.1.0"
+description = ""
+authors = ["Ekaterina Pavlova <miss.kat.katerina2007@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+flake8 = "^7.1.0"
+black = "^24.4.2"
+mypy = "^1.10.1"
+isort = "^5.13.2"
+pandas = "^2.2.2"
+xlrd = "^2.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
