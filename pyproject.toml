@@ -16,6 +16,13 @@ xlrd = "^2.0.1"
 python-dotenv = "^1.0.1"
 requests = "^2.32.3"
 
+[tool.mypy]
+disallow_untyped_defs = true
+warn_return_any = true
+exclude = [
+    "venv"
+]
+
 
 [build-system]
 requires = ["poetry-core"]

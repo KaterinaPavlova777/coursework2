@@ -40,8 +40,8 @@ def select_range_by_date(user_data: str) -> list:
     data = read_from_xlsx_file("../data/operations.xls")
     for transaction in data:
         if (
-            user_data[3:5] == transaction["Дата операции"][3:5]
-            and user_data[0:2] >= transaction["Дата операции"][0:2]
+            user_data[5:7] == transaction["Дата операции"][3:5]
+            and user_data[8:10] >= transaction["Дата операции"][0:2]
         ):
             new_json.append(transaction)
     logger.info(f"the resulting list {new_json}")
@@ -129,7 +129,7 @@ def calculation_cashback(user_data: str) -> list:
     result = []
 
     for k, v in data.items():
-        result.append({k: v, "cashback": v / 100})
+        result.append({"last_digits": k, "total_spent": v, "cashback": v / 100})
     logger.info(f"the resulting list {result}")
     return result
 
@@ -139,40 +139,67 @@ def top_five_transactions(user_data: str) -> list:
     Функция, которая выводит топ-5 транзакций по сумме платежа.
     """
     logger.info(f"top_five_transactions {user_data}")
+
+    new_list = []
+
     data = select_range_by_date(user_data)
     result = sorted(
         data, key=lambda x: x["Сумма операции с округлением"], reverse=True
     )[0:5]
-    logger.info(f"the resulting list {result}")
-    return result
+
+    for dict_ in result:
+        new_list.append(
+            {
+                "date": dict_["Дата платежа"],
+                "amount": dict_["Сумма операции с округлением"],
+                "category": dict_["Категория"],
+                "description": dict_["Описание"],
+            }
+        )
+
+    logger.info(f"the resulting list {new_list}")
+    return new_list
 
 
-def exchange_rate(currency: str) -> float:
+def exchange_rate() -> list:
     """
     Функция, которая выводит курс валют.
     """
-    logger.info(f"exchange_rate {currency}")
-    url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currency}&amount=1"
-    response = requests.get(url, headers=headers).json()
-    result = response["result"]
-    logger.info(f"the resulting currency {result}")
-    return result
+    logger.info("exchange_rate")
+    currencies = ["USD", "EUR"]
+    new_list = []
+    for currenc in currencies:
+        url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currenc}&amount=1"
+        response = requests.get(url, headers=headers).json()
+        result = response["result"]
+        new_list.append({"currency": currenc, "rate": result})
+    logger.info(f"the resulting list {new_list}")
+    return new_list
 
 
-def get_sp500_price(stock: str) -> float:
+def get_sp500_price() -> list:
     """
     Функция, которая возращает стоимость акций S&P500.
     """
-    logger.info(f"get_sp500_price {stock}")
+    logger.info("get_sp500_price")
     api = api_key_2
-    url = f"https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol={stock}&interval=1min&apikey={api}"
 
-    response = requests.get(url)
-    data = response.json()
+    stocks = ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]
+    new_list = []
 
-    latest_data = data["Time Series (1min)"]
-    latest_timestamp = sorted(latest_data.keys())[0]
-    latest_price = latest_data[latest_timestamp]["4. close"]
+    for stock in stocks:
+        url = (
+            f"https://www.alphavantage.co/query?"
+            f"function=TIME_SERIES_INTRADAY&symbol={stock}&interval=1min&apikey={api}"
+        )
 
-    logger.info(f"the resulting stock {latest_price}")
-    return latest_price
+        response = requests.get(url)
+        data = response.json()
+        latest_data = data["Time Series (1min)"]
+        latest_timestamp = sorted(latest_data.keys())[0]
+        latest_price = latest_data[latest_timestamp]["4. close"]
+
+        new_list.append({"stock": stock, "price": latest_price})
+
+    logger.info(f"the resulting list {new_list}")
+    return new_list
