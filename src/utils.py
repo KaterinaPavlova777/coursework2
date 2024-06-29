@@ -161,12 +161,11 @@ def top_five_transactions(user_data: str) -> list:
     return new_list
 
 
-def exchange_rate() -> list:
+def exchange_rate(currencies: list) -> list:
     """
     Функция, которая выводит курс валют.
     """
     logger.info("exchange_rate")
-    currencies = ["USD", "EUR"]
     new_list = []
     for currenc in currencies:
         url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currenc}&amount=1"
@@ -177,14 +176,13 @@ def exchange_rate() -> list:
     return new_list
 
 
-def get_sp500_price() -> list:
+def get_sp500_price(stocks: list) -> list:
     """
     Функция, которая возращает стоимость акций S&P500.
     """
     logger.info("get_sp500_price")
     api = api_key_2
 
-    stocks = ["AAPL", "AMZN", "GOOGL", "MSFT", "TSLA"]
     new_list = []
 
     for stock in stocks:
