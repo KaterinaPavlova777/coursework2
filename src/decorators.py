@@ -4,7 +4,7 @@ from typing import Any, Callable
 
 def log(filename: str = "log.txt") -> Callable:
     """
-    Декоратор для логирования функций.
+    Декоратор, чтобы логировать функции.
     """
 
     def decorator(func: Callable) -> Callable:
