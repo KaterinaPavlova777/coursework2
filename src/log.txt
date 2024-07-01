@@ -1,0 +1,3 @@
+a Error unsupported operand type(s) for +: 'int' and 'str' input data: (), {}
+a Error unsupported operand type(s) for +: 'int' and 'str' input data: (), {}
+a 9
