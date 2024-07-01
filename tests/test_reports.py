@@ -46,9 +46,7 @@ def data() -> list:
 
 def test_spending_by_category(data: DataFrame) -> None:
     data = DataFrame(data)
-    assert spending_by_category(data, "Транспорт", "2018-07-30 09:18:00").to_dict(
-        "records"
-    ) == [
+    assert spending_by_category(data, "Транспорт", "2018-07-30 09:18:00").to_dict("records") == [
         {
             "MCC": 4131.0,
             "Бонусы (включая кэшбэк)": 0,

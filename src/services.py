@@ -20,9 +20,7 @@ def get_transactions_by_keyword(user_keyword: str) -> list:
 
     for transaction in data:
         try:
-            if (user_keyword in transaction["Описание"]) or (
-                user_keyword in transaction["Категория"]
-            ):
+            if (user_keyword in transaction["Описание"]) or (user_keyword in transaction["Категория"]):
                 result.append(transaction)
         except TypeError:
             continue

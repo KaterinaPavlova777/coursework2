@@ -3,17 +3,8 @@ from unittest.mock import Mock, patch
 import pytest
 from pandas import DataFrame
 
-from src.utils import (
-    calculation_cashback,
-    card_from_xlsx_file,
-    exchange_rate,
-    get_sp500_price,
-    read_from_xlsx_file,
-    select_range_by_date,
-    top_five_transactions,
-    total_amount_expences,
-    user_greeting,
-)
+from src.utils import (calculation_cashback, card_from_xlsx_file, exchange_rate, get_sp500_price, read_from_xlsx_file,
+                       select_range_by_date, top_five_transactions, total_amount_expences, user_greeting)
 
 
 @pytest.fixture

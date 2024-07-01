@@ -48,19 +48,17 @@ def test_main_page_info() -> None:
                         },
                     ]
 
-                    mock_open.return_value.__enter__.return_value.read.return_value = (
-                        json.dumps(
-                            {
-                                "user_currencies": ["USD", "EUR"],
-                                "user_stocks": [
-                                    "AAPL",
-                                    "AMZN",
-                                    "GOOGL",
-                                    "MSFT",
-                                    "TSLA",
-                                ],
-                            }
-                        )
+                    mock_open.return_value.__enter__.return_value.read.return_value = json.dumps(
+                        {
+                            "user_currencies": ["USD", "EUR"],
+                            "user_stocks": [
+                                "AAPL",
+                                "AMZN",
+                                "GOOGL",
+                                "MSFT",
+                                "TSLA",
+                            ],
+                        }
                     )
 
                     mock_read.return_value = DataFrame(data)

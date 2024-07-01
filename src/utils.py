@@ -111,9 +111,7 @@ def total_amount_expences(user_data: str) -> dict:
     for transaction in data:
         try:
             if transaction["Номер карты"][1:] in result.keys():
-                result[transaction["Номер карты"][1:]] += transaction[
-                    "Сумма операции с округлением"
-                ]
+                result[transaction["Номер карты"][1:]] += transaction["Сумма операции с округлением"]
         except TypeError:
             continue
     logger.info(f"the resulting dict {result}")
@@ -143,9 +141,7 @@ def top_five_transactions(user_data: str) -> list:
     new_list = []
 
     data = select_range_by_date(user_data)
-    result = sorted(
-        data, key=lambda x: x["Сумма операции с округлением"], reverse=True
-    )[0:5]
+    result = sorted(data, key=lambda x: x["Сумма операции с округлением"], reverse=True)[0:5]
 
     for dict_ in result:
         new_list.append(
