@@ -27,5 +27,6 @@ def main_page_info(user_date: str) -> dict:
         "currency_rates": exchange_rate(list_currencies),
         "stock_prices": get_sp500_price(list_stocks),
     }
+    json.dumps(info_for_main_page)
     logger.info(f"the resulting dict {info_for_main_page}")
     return info_for_main_page
