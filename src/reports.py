@@ -1,6 +1,7 @@
+import json
 import logging
 from datetime import datetime, timedelta
-from typing import Optional
+from typing import Any, Optional
 
 import pandas as pd
 
@@ -12,7 +13,7 @@ logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
 
 
-def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> pd.DataFrame:
+def spending_by_category(transactions: pd.DataFrame, category: str, date: Optional[str] = None) -> Any:
     """
     Функция, которая возвращает траты по заданной категории за последние три месяца (от переданной даты).
     """
@@ -27,7 +28,13 @@ def spending_by_category(transactions: pd.DataFrame, category: str, date: Option
     sorted_date = transactions[pd.to_datetime(transactions["Дата операции"], dayfirst=True) > date_3_months]
     sorted_date = sorted_date[pd.to_datetime(sorted_date["Дата операции"], dayfirst=True) <= new_date]
     sorted_date = sorted_date[sorted_date["Категория"] == category]
-    result = pd.DataFrame(sorted_date)
+
+    transaction_list = sorted_date.to_dict(orient="records")
+    result = sorted_date.to_json(orient="records")
+    json_response = json.dumps(transaction_list, indent=4, ensure_ascii=False)
+    with open("spending_by_category.json", "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=4, ensure_ascii=False)
+
     logger.info(f"the resulting DataFrame {result}")
 
-    return result
+    return json_response

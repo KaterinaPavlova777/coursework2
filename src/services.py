@@ -25,7 +25,7 @@ def get_transactions_by_keyword(user_keyword: str) -> Any:
     filtered_data = data[
         data["Описание"].str.contains(user_keyword, case=False)
         | data["Категория"].str.contains(user_keyword, case=False)
-        ]
+    ]
 
     transaction_list = filtered_data.to_dict(orient="records")
     json_response = json.dumps(transaction_list, indent=4, ensure_ascii=False)
