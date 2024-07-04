@@ -1,7 +1,8 @@
 import json
 import logging
+from typing import Any
 
-from src.utils import read_from_xlsx_file
+import pandas as pd
 
 logger = logging.getLogger("utils")
 file_handler = logging.FileHandler("utils.log", "w")
@@ -11,20 +12,25 @@ logger.addHandler(file_handler)
 logger.setLevel(logging.DEBUG)
 
 
-def get_transactions_by_keyword(user_keyword: str) -> list:
+def get_transactions_by_keyword(user_keyword: str) -> Any:
     """
     Функция, которая возвращает транзакцию по ключевлму слову.
     """
     logger.info(f"get_transactions_by_keyword {user_keyword}")
-    result = []
-    data = read_from_xlsx_file("../data/operations.xls")
+    path = "../data/operations.xls"
+    data = pd.read_excel(path)
+    data["Описание"] = data["Описание"].astype(str)
+    data["Категория"] = data["Категория"].astype(str)
 
-    for transaction in data:
-        try:
-            if (user_keyword in transaction["Описание"]) or (user_keyword in transaction["Категория"]):
-                result.append(transaction)
-        except TypeError:
-            continue
-    json.dumps(result)
-    logger.info(f"the resulting list {result}")
-    return result
+    filtered_data = data[
+        data["Описание"].str.contains(user_keyword, case=False)
+        | data["Категория"].str.contains(user_keyword, case=False)
+        ]
+
+    transaction_list = filtered_data.to_dict(orient="records")
+    json_response = json.dumps(transaction_list, indent=4, ensure_ascii=False)
+    with open("transactions_by_keyword.json", "w", encoding="utf-8") as f:
+        json.dump(transaction_list, f, indent=4, ensure_ascii=False)
+
+    logger.info("Результаты поиска записаны в файл transactions_search_result.json")
+    return json_response
