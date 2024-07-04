@@ -1,3 +1,4 @@
+import json
 import logging
 
 from src.utils import read_from_xlsx_file
@@ -24,5 +25,6 @@ def get_transactions_by_keyword(user_keyword: str) -> list:
                 result.append(transaction)
         except TypeError:
             continue
+    json.dumps(result)
     logger.info(f"the resulting list {result}")
     return result
